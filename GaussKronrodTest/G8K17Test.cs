@@ -63,6 +63,21 @@ namespace GaussKronrodTest {
             }
         }
 
+        public static void WriteHexcode() {
+            using StreamWriter sw = new($"../../../../results/G8K17_hexcode.txt");
+
+            sw.WriteLine("{ 8, new ReadOnlyCollection<(ddouble x, ddouble wg, ddouble wk)>(new (ddouble x, ddouble wg, ddouble wk)[]{");
+
+            for (int i = 0; i < x.Count; i++) {
+                sw.WriteLine($"    ({FP128.ToFP128((1 - x[i]) / 2)}, {FP128.ToFP128(w2[i] / 2)}, {FP128.ToFP128(w1[i] / 2)}),");
+            }
+            for (int i = x.Count - 2; i >= 0; i--) {
+                sw.WriteLine($"    ({FP128.ToFP128((1 + x[i]) / 2)}, {FP128.ToFP128(w2[i] / 2)}, {FP128.ToFP128(w1[i] / 2)}),");
+            }
+
+            sw.WriteLine("}) },");
+        }
+
         public static void WriteBinary() {
             using BinaryWriter sw = new(File.Open($"../../../../results/G8K17_n{MultiPrecision<N>.Length}.bin", FileMode.Create));
 
@@ -93,6 +108,7 @@ namespace GaussKronrodTest {
         [TestMethod]
         public void WriteText() {
             G8K17Test<Pow2.N8>.WriteText();
+            G8K17Test<Pow2.N8>.WriteHexcode();
         }
 
         [TestMethod]

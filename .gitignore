@@ -55,5 +55,6 @@ nugetpack.bat
 /**/*.nupkg
 GNU/
 results/*_bits2048.bin
+results/*_hexcode.txt
 
 # Safelist
