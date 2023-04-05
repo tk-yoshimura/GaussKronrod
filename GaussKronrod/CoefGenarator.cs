@@ -20,24 +20,24 @@ namespace GaussKronrod {
 
             ka = (x == 0) ? 1 : 0;
 
-            for (iter = 1; iter <= 50; iter++){
+            for (iter = 1; iter <= 50; iter++) {
                 b1 = 0;
                 b2 = b[m];
                 yy = 4 * x * x - 2;
                 d1 = 0;
 
-                if (even){
+                if (even) {
                     ai = m + m + 1;
                     d2 = ai * b[m];
                     dif = 2;
                 }
-                else{
+                else {
                     ai = m + 1;
                     d2 = 0;
                     dif = 1;
                 }
 
-                for (k = 1; k <= m; k++){
+                for (k = 1; k <= m; k++) {
                     ai -= dif;
                     i = m - k + 1;
                     b0 = b1;
@@ -45,17 +45,17 @@ namespace GaussKronrod {
                     d0 = d1;
                     d1 = d2;
                     b2 = yy * b1 - b0 + b[i - 1];
-                    if (!even){
+                    if (!even) {
                         i++;
                     }
                     d2 = yy * d1 - d0 + ai * b[i - 1];
                 }
 
-                if (even){
+                if (even) {
                     f = x * (b2 - b1);
                     fd = d2 + d1;
                 }
-                else{
+                else {
                     f = 0.5 * (b2 - b0);
                     fd = 4 * x * d2;
                 }
@@ -65,13 +65,11 @@ namespace GaussKronrod {
                 delta = f / fd;
                 x -= delta;
 
-                if (ka == 1)
-                {
+                if (ka == 1) {
                     break;
                 }
 
-                if (Math.Abs(delta) <= eps)
-                {
+                if (Math.Abs(delta) <= eps) {
                     ka = 1;
                 }
             }
@@ -79,7 +77,7 @@ namespace GaussKronrod {
             //
             //  Catch non-convergence.
             //
-            if (ka != 1){
+            if (ka != 1) {
                 throw new ArithmeticException("not convergenced");
             }
 
@@ -89,8 +87,7 @@ namespace GaussKronrod {
             d0 = 1;
             d1 = x;
             ai = 0;
-            for (k = 2; k <= n; k++)
-            {
+            for (k = 2; k <= n; k++) {
                 ai++;
                 d2 = ((ai + ai + 1) * x * d1 - ai * d0) / (ai + 1);
                 d0 = d1;
@@ -100,8 +97,8 @@ namespace GaussKronrod {
             w = coef2 / (fd * d2);
         }
 
-        static void AbscissaWeights2(int n, int m, double eps, double coef2, bool even, double[] b, ref double x, ref double w1, ref double w2) { 
-            double ai, an, delta, p0 = 0, p1, p2 = 0, pd0, pd1, pd2 = 0, yy;    
+        static void AbscissaWeights2(int n, int m, double eps, double coef2, bool even, double[] b, ref double x, ref double w1, ref double w2) {
+            double ai, an, delta, p0 = 0, p1, p2 = 0, pd0, pd1, pd2 = 0, yy;
             int i, iter, k, ka;
 
             ka = (x == 0) ? 1 : 0;
@@ -109,7 +106,7 @@ namespace GaussKronrod {
             //
             //  Iterative process for the computation of a Gaussian abscissa.
             //
-            for (iter = 1; iter <= 50; iter++){
+            for (iter = 1; iter <= 50; iter++) {
                 p0 = 1;
                 p1 = x;
                 pd0 = 0;
@@ -117,12 +114,12 @@ namespace GaussKronrod {
                 //
                 //  When N is 1, we need to initialize P2 and PD2 to avoid problems with DELTA.
                 //
-                if (n <= 1){
-                    if (double.Epsilon < Math.Abs(x)){
+                if (n <= 1) {
+                    if (double.Epsilon < Math.Abs(x)) {
                         p2 = (3 * x * x - 1) / 2;
                         pd2 = 3 * x;
                     }
-                    else{
+                    else {
                         p2 = 3 * x;
                         pd2 = 3;
                     }
@@ -144,10 +141,10 @@ namespace GaussKronrod {
                 delta = p2 / pd2;
                 x -= delta;
 
-                if (ka == 1){
+                if (ka == 1) {
                     break;
                 }
-                if (Math.Abs(delta) <= eps){
+                if (Math.Abs(delta) <= eps) {
                     ka = 1;
                 }
             }
@@ -183,14 +180,10 @@ namespace GaussKronrod {
         }
 
         public static (double[] x, double[] w1, double[] w2) Coef(int n, double eps) {
-            if (!new int[] { 7, 15, 31, 63, 127, 255 }.Contains(n)) {
-                throw new ArgumentException(nameof(n));
-            }
-
             double[] x = new double[n + 1], w1 = new double[n + 1], w2 = new double[n + 1];
 
             double ak, an, bb, c, coef, coef2, d, s, x1, xx, y;
-            
+
             int i, k, l, ll, m;
 
             bool even;
@@ -219,7 +212,7 @@ namespace GaussKronrod {
                 ak += 2;
                 tau[l] = ((ak - 1) * ak - an * (an + 1)) * (ak + 2) * tau[l - 1]
                     / (ak * ((ak + 3) * (ak + 2) - an * (an + 1)));
-                                                
+
                 b[m - l - 1] = tau[l];
 
                 for (ll = 1; ll <= l; ll++) {

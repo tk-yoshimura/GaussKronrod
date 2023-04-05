@@ -5,6 +5,11 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaussKronrod", "GaussKronrod\GaussKronrod.csproj", "{A47021B9-4A23-4F4B-9D8E-083ABEFAAF3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GaussKronrodTest", "GaussKronrodTest\GaussKronrodTest.csproj", "{835FF9C3-A202-45BF-B543-3255A12BE445}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A47021B9-4A23-4F4B-9D8E-083ABEFAAF3D} = {A47021B9-4A23-4F4B-9D8E-083ABEFAAF3D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +32,18 @@ Global
 		{A47021B9-4A23-4F4B-9D8E-083ABEFAAF3D}.Release|x64.Build.0 = Release|Any CPU
 		{A47021B9-4A23-4F4B-9D8E-083ABEFAAF3D}.Release|x86.ActiveCfg = Release|Any CPU
 		{A47021B9-4A23-4F4B-9D8E-083ABEFAAF3D}.Release|x86.Build.0 = Release|Any CPU
+		{835FF9C3-A202-45BF-B543-3255A12BE445}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{835FF9C3-A202-45BF-B543-3255A12BE445}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{835FF9C3-A202-45BF-B543-3255A12BE445}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{835FF9C3-A202-45BF-B543-3255A12BE445}.Debug|x64.Build.0 = Debug|Any CPU
+		{835FF9C3-A202-45BF-B543-3255A12BE445}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{835FF9C3-A202-45BF-B543-3255A12BE445}.Debug|x86.Build.0 = Debug|Any CPU
+		{835FF9C3-A202-45BF-B543-3255A12BE445}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{835FF9C3-A202-45BF-B543-3255A12BE445}.Release|Any CPU.Build.0 = Release|Any CPU
+		{835FF9C3-A202-45BF-B543-3255A12BE445}.Release|x64.ActiveCfg = Release|Any CPU
+		{835FF9C3-A202-45BF-B543-3255A12BE445}.Release|x64.Build.0 = Release|Any CPU
+		{835FF9C3-A202-45BF-B543-3255A12BE445}.Release|x86.ActiveCfg = Release|Any CPU
+		{835FF9C3-A202-45BF-B543-3255A12BE445}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -54,5 +54,6 @@ nugetpack.bat
 /**/*.nuspec
 /**/*.nupkg
 GNU/
+results/*_bits2048.bin
 
 # Safelist
