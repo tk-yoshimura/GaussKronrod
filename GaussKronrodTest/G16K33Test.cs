@@ -8,7 +8,7 @@ namespace GaussKronrodTest {
         static readonly ReadOnlyCollection<MultiPrecision<N>> x, w1, w2;
 
         static G16K33Test() {
-            (MultiPrecision<Plus2<N>>[] x_plus1, MultiPrecision<Plus2<N>>[] w1_plus1, MultiPrecision<Plus2<N>>[] w2_plus1) = CoefGenaratorMP<Plus2<N>>.Coef(16);
+            (MultiPrecision<Plus4<N>>[] x_plus1, MultiPrecision<Plus4<N>>[] w1_plus1, MultiPrecision<Plus4<N>>[] w2_plus1) = CoefGenaratorMP<Plus4<N>>.Coef(16);
 
             x = Array.AsReadOnly(x_plus1.Select(v => MultiPrecision<N>.Abs(v.Convert<N>())).ToArray());
             w1 = Array.AsReadOnly(w1_plus1.Select(v => v.Convert<N>()).ToArray());
