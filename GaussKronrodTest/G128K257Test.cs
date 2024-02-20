@@ -4,11 +4,11 @@ using MultiPrecision;
 using System.Collections.ObjectModel;
 
 namespace GaussKronrodTest {
-    public class G7K15Test<N> where N : struct, IConstant {
+    public class G128K257Test<N> where N : struct, IConstant {
         static readonly ReadOnlyCollection<MultiPrecision<N>> x, w1, w2;
 
-        static G7K15Test() {
-            (MultiPrecision<N>[] x_plus1, MultiPrecision<N>[] w1_plus1, MultiPrecision<N>[] w2_plus1) = CoefGenaratorMP<N, Plus32<N>>.Coef(7);
+        static G128K257Test() {
+            (MultiPrecision<N>[] x_plus1, MultiPrecision<N>[] w1_plus1, MultiPrecision<N>[] w2_plus1) = CoefGenaratorMP<N, Plus32<N>>.Coef(128);
 
             x = Array.AsReadOnly(x_plus1.Select(v => MultiPrecision<N>.Abs(v)).ToArray());
             w1 = Array.AsReadOnly(w1_plus1);
@@ -52,7 +52,7 @@ namespace GaussKronrodTest {
         }
 
         public static void WriteText() {
-            using StreamWriter sw = new($"../../../../results/G7K15_n{MultiPrecision<N>.Length}.csv");
+            using StreamWriter sw = new($"../../../../results/G128K257_n{MultiPrecision<N>.Length}.csv");
 
             sw.WriteLine("gauss/kronrod,x,w");
             for (int i = 1; i < x.Count; i += 2) {
@@ -64,9 +64,9 @@ namespace GaussKronrodTest {
         }
 
         public static void WriteHexcode() {
-            using StreamWriter sw = new($"../../../../results/G7K15_hexcode.txt");
+            using StreamWriter sw = new($"../../../../results/G128K257_hexcode.txt");
 
-            sw.WriteLine("{ 7, new ReadOnlyCollection<(ddouble x, ddouble wg, ddouble wk)>(new (ddouble x, ddouble wg, ddouble wk)[]{");
+            sw.WriteLine("{ 32, new ReadOnlyCollection<(ddouble x, ddouble wg, ddouble wk)>(new (ddouble x, ddouble wg, ddouble wk)[]{");
 
             for (int i = 0; i < x.Count; i++) {
                 sw.WriteLine($"    ({FP128.ToFP128((1 - x[i]) / 2)}, {FP128.ToFP128(w2[i] / 2)}, {FP128.ToFP128(w1[i] / 2)}),");
@@ -79,7 +79,7 @@ namespace GaussKronrodTest {
         }
 
         public static void WriteBinary() {
-            using BinaryWriter sw = new(File.Open($"../../../../results/G7K15_n{MultiPrecision<N>.Length}.bin", FileMode.Create));
+            using BinaryWriter sw = new(File.Open($"../../../../results/G128K257_n{MultiPrecision<N>.Length}.bin", FileMode.Create));
 
             for (int i = 0; i < x.Count; i++) {
                 sw.Write(x[i]);
@@ -94,70 +94,70 @@ namespace GaussKronrodTest {
     }
 
     [TestClass]
-    public class G7K15N8Test {
+    public class G128K257N8Test {
         [TestMethod]
         public void PolyTest() {
-            G7K15Test<Pow2.N8>.PolyTest();
+            G128K257Test<Pow2.N8>.PolyTest();
         }
 
         [TestMethod]
         public void SumTest() {
-            G7K15Test<Pow2.N8>.SumTest();
+            G128K257Test<Pow2.N8>.SumTest();
         }
 
         [TestMethod]
         public void WriteText() {
-            G7K15Test<Pow2.N8>.WriteText();
-            G7K15Test<Pow2.N8>.WriteHexcode();
+            G128K257Test<Pow2.N8>.WriteText();
+            G128K257Test<Pow2.N8>.WriteHexcode();
         }
 
         [TestMethod]
         public void WriteBinary() {
-            G7K15Test<Pow2.N8>.WriteBinary();
+            G128K257Test<Pow2.N8>.WriteBinary();
         }
     }
 
     [TestClass]
-    public class G7K15N16Test {
+    public class G128K257N16Test {
         [TestMethod]
         public void PolyTest() {
-            G7K15Test<Pow2.N16>.PolyTest();
+            G128K257Test<Pow2.N16>.PolyTest();
         }
 
         [TestMethod]
         public void SumTest() {
-            G7K15Test<Pow2.N16>.SumTest();
+            G128K257Test<Pow2.N16>.SumTest();
         }
     }
 
     [TestClass]
-    public class G7K15N32Test {
+    public class G128K257N32Test {
         [TestMethod]
         public void PolyTest() {
-            G7K15Test<Pow2.N32>.PolyTest();
+            G128K257Test<Pow2.N32>.PolyTest();
         }
 
         [TestMethod]
         public void SumTest() {
-            G7K15Test<Pow2.N32>.SumTest();
+            G128K257Test<Pow2.N32>.SumTest();
         }
     }
 
     [TestClass]
-    public class G7K15N64Test {
+    public class G128K257N64Test {
         [TestMethod]
         public void PolyTest() {
-            G7K15Test<Pow2.N64>.PolyTest();
+            G128K257Test<Pow2.N64>.PolyTest();
         }
 
         [TestMethod]
         public void SumTest() {
-            G7K15Test<Pow2.N64>.SumTest();
+            G128K257Test<Pow2.N64>.SumTest();
         }
 
         [TestMethod]
         public void WriteBinary() {
-            G7K15Test<Pow2.N64>.WriteBinary();
+            G128K257Test<Pow2.N64>.WriteBinary();
         }
     }
 }

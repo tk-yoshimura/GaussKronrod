@@ -15,14 +15,19 @@
 using MultiPrecision;
 
 namespace GaussKronrod {
-    public static class CoefGenaratorMP<N> where N : struct, IConstant {
-        static void AbscissaWeights1(int n, int m, MultiPrecision<N> coef2, bool even, MultiPrecision<N>[] b, ref MultiPrecision<N> x, ref MultiPrecision<N> w) {
-            MultiPrecision<N> ai, b0 = 0, b1, b2, d0, d1, d2 = 0, delta, dif, f, fd = 0, yy;
-            int i, iter, k, ka;
+    public static class CoefGenaratorMP<N, M> where N : struct, IConstant where M : struct, IConstant {
+        static CoefGenaratorMP() {
+            if (!(default(N).Value + 4 < default(M).Value)) {
+                throw new ArgumentException("invalid type: must be N + 4 < M.");
+            }
+        }
 
-            ka = (x == 0) ? 1 : 0;
+        static void AbscissaWeights1(int n, int m, MultiPrecision<M> coef2, bool even, MultiPrecision<M>[] b, ref MultiPrecision<M> x, ref MultiPrecision<M> w) {
+            MultiPrecision<M> ai, b0 = 0, b1, b2, d0, d1, d2 = 0, delta, dif, f, fd = 0, yy;
+            
+            int ka = (x == 0) ? 1 : 0;
 
-            for (iter = 1; iter <= 1024; iter++) {
+            for (int iter = 1; iter <= 8192; iter++) {
                 b1 = 0;
                 b2 = b[m];
                 yy = 4 * x * x - 2;
@@ -39,9 +44,9 @@ namespace GaussKronrod {
                     dif = 1;
                 }
 
-                for (k = 1; k <= m; k++) {
+                for (int k = 1; k <= m; k++) {
                     ai -= dif;
-                    i = m - k + 1;
+                    int i = m - k + 1;
                     b0 = b1;
                     b1 = b2;
                     d0 = d1;
@@ -70,7 +75,7 @@ namespace GaussKronrod {
                 if (ka == 1) {
                     break;
                 }
-                if (x.Exponent - delta.Exponent > MultiPrecision<N>.Bits - 8) {
+                if (x.Exponent - delta.Exponent > MultiPrecision<N>.Bits + 128) {
                     ka = 1;
                 }
             }
@@ -88,7 +93,7 @@ namespace GaussKronrod {
             d0 = 1;
             d1 = x;
             ai = 0;
-            for (k = 2; k <= n; k++) {
+            for (int k = 2; k <= n; k++) {
                 ai += 1;
                 d2 = ((ai + ai + 1) * x * d1 - ai * d0) / (ai + 1);
                 d0 = d1;
@@ -98,16 +103,15 @@ namespace GaussKronrod {
             w = coef2 / (fd * d2);
         }
 
-        static void AbscissaWeights2(int n, int m, MultiPrecision<N> coef2, bool even, MultiPrecision<N>[] b, ref MultiPrecision<N> x, ref MultiPrecision<N> w1, ref MultiPrecision<N> w2) {
-            MultiPrecision<N> ai, an, delta, p0 = 0, p1, p2 = 0, pd0, pd1, pd2 = 0, yy;
-            int i, iter, k, ka;
-
-            ka = (x == 0) ? 1 : 0;
+        static void AbscissaWeights2(int n, int m, MultiPrecision<M> coef2, bool even, MultiPrecision<M>[] b, ref MultiPrecision<M> x, ref MultiPrecision<M> w1, ref MultiPrecision<M> w2) {
+            MultiPrecision<M> ai, an, delta, p0 = 0, p1, p2 = 0, pd0, pd1, pd2 = 0, yy;
+            
+            int ka = (x == 0) ? 1 : 0;
 
             //
             //  Iterative process for the computation of a Gaussian abscissa.
             //
-            for (iter = 1; iter <= 1024; iter++) {
+            for (int iter = 1; iter <= 8192; iter++) {
                 p0 = 1;
                 p1 = x;
                 pd0 = 0;
@@ -116,7 +120,7 @@ namespace GaussKronrod {
                 //  When N is 1, we need to initialize P2 and PD2 to avoid problems with DELTA.
                 //
                 if (n <= 1) {
-                    if (MultiPrecision<N>.Epsilon < MultiPrecision<N>.Abs(x)) {
+                    if (MultiPrecision<M>.Epsilon < MultiPrecision<M>.Abs(x)) {
                         p2 = (3 * x * x - 1) / 2;
                         pd2 = 3 * x;
                     }
@@ -127,7 +131,7 @@ namespace GaussKronrod {
                 }
 
                 ai = 0;
-                for (k = 2; k <= n; k++) {
+                for (int k = 2; k <= n; k++) {
                     ai += 1;
                     p2 = ((ai + ai + 1) * x * p1 - ai * p0) / (ai + 1);
                     pd2 = ((ai + ai + 1) * (p1 + x * pd1) - ai * pd0) / (ai + 1);
@@ -145,7 +149,7 @@ namespace GaussKronrod {
                 if (ka == 1) {
                     break;
                 }
-                if (x.Exponent - delta.Exponent > MultiPrecision<N>.Bits - 8) {
+                if (x.Exponent - delta.Exponent > MultiPrecision<N>.Bits + 128) {
                     ka = 1;
                 }
             }
@@ -165,8 +169,8 @@ namespace GaussKronrod {
             p1 = 0;
             p2 = b[m];
             yy = 4 * x * x - 2;
-            for (k = 1; k <= m; k++) {
-                i = m - k + 1;
+            for (int k = 1; k <= m; k++) {
+                int i = m - k + 1;
                 p0 = p1;
                 p1 = p2;
                 p2 = yy * p1 - p0 + b[i - 1];
@@ -181,23 +185,19 @@ namespace GaussKronrod {
         }
 
         public static (MultiPrecision<N>[] x, MultiPrecision<N>[] w1, MultiPrecision<N>[] w2) Coef(int n) {
-            MultiPrecision<N>[] x = new MultiPrecision<N>[n + 1], w1 = new MultiPrecision<N>[n + 1], w2 = new MultiPrecision<N>[n + 1];
+            MultiPrecision<M>[] x = new MultiPrecision<M>[n + 1], w1 = new MultiPrecision<M>[n + 1], w2 = new MultiPrecision<M>[n + 1];
 
-            MultiPrecision<N> ak, an, bb, c, coef, coef2, d, s, x1, xx, y;
+            MultiPrecision<M> ak, an, bb, c, coef, coef2, d, s, x1, xx, y;
 
-            int i, k, l, ll, m;
+            MultiPrecision<M>[] b = new MultiPrecision<M>[((n + 1) / 2) + 1];
+            MultiPrecision<M>[] tau = new MultiPrecision<M>[(n + 1) / 2];
 
-            bool even;
-
-            MultiPrecision<N>[] b = new MultiPrecision<N>[((n + 1) / 2) + 1];
-            MultiPrecision<N>[] tau = new MultiPrecision<N>[(n + 1) / 2];
-
-            m = (n + 1) / 2;
-            even = (2 * m == n);
+            int m = (n + 1) / 2;
+            bool even = (2 * m == n);
 
             d = 2;
             an = 0;
-            for (k = 1; k <= n; k++) {
+            for (int k = 1; k <= n; k++) {
                 an += 1;
                 d = d * an / (an + 0.5);
             }
@@ -209,14 +209,14 @@ namespace GaussKronrod {
             b[m - 1] = tau[0] - 1;
             ak = an;
 
-            for (l = 1; l < m; l++) {
+            for (int l = 1; l < m; l++) {
                 ak += 2;
                 tau[l] = ((ak - 1) * ak - an * (an + 1)) * (ak + 2) * tau[l - 1]
                     / (ak * ((ak + 3) * (ak + 2) - an * (an + 1)));
 
                 b[m - l - 1] = tau[l];
 
-                for (ll = 1; ll <= l; ll++) {
+                for (int ll = 1; ll <= l; ll++) {
                     b[m - l - 1] = b[m - l - 1] + tau[ll - 1] * b[m - l + ll - 1];
                 }
             }
@@ -225,10 +225,10 @@ namespace GaussKronrod {
             //
             //  Calculation of approximate values for the abscissas.
             //
-            bb = MultiPrecision<N>.SinPI(1 / (2 * (an + an + 1)));
-            x1 = MultiPrecision<N>.Sqrt(1 - bb * bb);
+            bb = MultiPrecision<M>.SinPI(1 / (2 * (an + an + 1)));
+            x1 = MultiPrecision<M>.Sqrt(1 - bb * bb);
             s = 2 * bb * x1;
-            c = MultiPrecision<N>.Sqrt(1 - s * s);
+            c = MultiPrecision<M>.Sqrt(1 - s * s);
             coef = 1 - (1 - 1 / an) / (8 * an * an);
             xx = coef * x1;
             //
@@ -237,15 +237,15 @@ namespace GaussKronrod {
             //  COEF2 = 2^(2*n+1) * n! * n! / (2n+1)! 
             //        = 2 * 4^n * n! / product( (n+1)*...*(2*n+1))
             //
-            coef2 = MultiPrecision<N>.Div(2, 2 * n + 1);
-            for (i = 1; i <= n; i++) {
+            coef2 = MultiPrecision<M>.Div(2, 2 * n + 1);
+            for (int i = 1; i <= n; i++) {
                 coef2 = coef2 * 4 * i / (n + i);
             }
             //
             //  Calculation of the K-th abscissa (a Kronrod abscissa) and the
             //  corresponding weight.
             //
-            for (k = 1; k <= n; k += 2) {
+            for (int k = 1; k <= n; k += 2) {
                 AbscissaWeights1(n, m, coef2, even, b, ref xx, ref w1[k - 1]);
                 w2[k - 1] = 0;
 
@@ -284,7 +284,11 @@ namespace GaussKronrod {
                 x[n] = xx;
             }
 
-            return (x, w1, w2);
+            return (
+                x.Select(v => v.Convert<N>()).ToArray(), 
+                w1.Select(v => v.Convert<N>()).ToArray(), 
+                w2.Select(v => v.Convert<N>()).ToArray()
+            );
         }
     }
 }

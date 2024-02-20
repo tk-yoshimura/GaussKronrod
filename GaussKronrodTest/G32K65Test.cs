@@ -8,11 +8,11 @@ namespace GaussKronrodTest {
         static readonly ReadOnlyCollection<MultiPrecision<N>> x, w1, w2;
 
         static G32K65Test() {
-            (MultiPrecision<Plus4<N>>[] x_plus1, MultiPrecision<Plus4<N>>[] w1_plus1, MultiPrecision<Plus4<N>>[] w2_plus1) = CoefGenaratorMP<Plus4<N>>.Coef(32);
+            (MultiPrecision<N>[] x_plus1, MultiPrecision<N>[] w1_plus1, MultiPrecision<N>[] w2_plus1) = CoefGenaratorMP<N, Plus32<N>>.Coef(32);
 
-            x = Array.AsReadOnly(x_plus1.Select(v => MultiPrecision<N>.Abs(v.Convert<N>())).ToArray());
-            w1 = Array.AsReadOnly(w1_plus1.Select(v => v.Convert<N>()).ToArray());
-            w2 = Array.AsReadOnly(w2_plus1.Select(v => v.Convert<N>()).ToArray());
+            x = Array.AsReadOnly(x_plus1.Select(v => MultiPrecision<N>.Abs(v)).ToArray());
+            w1 = Array.AsReadOnly(w1_plus1);
+            w2 = Array.AsReadOnly(w2_plus1);
         }
 
         public static void PolyTest() {
